@@ -100,7 +100,7 @@ r86; f2, f22; f100; 0.27; Planks, Diamond -> Jukebox
 r87; f2, f6, f15, f20; f101; 0.46; Planks, Stone, Iron Ingot, Redstone -> Piston
 r88; f15; f102; 0.39; Iron Ingot -> Minecart
 r89; f5, f10; f104; 0.45; Chest, Boat -> Boat with Chest
-r90; f2; f11; 0.38; Planks -> Wooden Slabs
+
 
 r91; f58; f109; 0.67; Sugar Cane -> Sugar
 r92; f21, f112; f113; 0.54; Gold Ingot, Melon Slice -> Glistering Melon Slice

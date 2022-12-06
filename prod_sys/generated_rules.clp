@@ -13,6 +13,19 @@
 (slot conf (type FLOAT) (default 0.0))
 )
 
+(defrule combine
+(declare (salience 60))
+?i1 <- (item (name ?f1) (conf ?conf1))
+?i2 <- (item (name ?f2) (conf ?conf2))
+=>
+(if (and (eq ?f1 ?f2) (!= ?conf1 ?conf2)) then
+(assert  (item (name ?f1) (conf (- (+ ?conf1 ?conf2) (* ?conf1 ?conf2)))))
+(retract ?i1)
+(retract ?i2)
+(assert ( sendmessagehalt (sym-cat ?f1 ": Conf was recalculated")) )
+(halt))
+)
+
 (defrule r1
 (declare (salience 50))
 (item (name f1) (conf ?c0))
@@ -878,20 +891,11 @@
 (halt)
 )
 
-(defrule r90
-(declare (salience 50))
-(item (name f2) (conf ?c0))
-=>
-(assert (item (name f11) (conf (* 0.38 (min ?c0)) ) ) )
-(assert (sendmessagehalt "f11: Planks -> Wooden Slabs"))
-(halt)
-)
-
 (defrule r91
 (declare (salience 50))
 (item (name f58) (conf ?c0))
 =>
-(assert (item (name f109) (conf (* 0. (min ?c0)) ) ) )
+(assert (item (name f109) (conf (* 0.67 (min ?c0)) ) ) )
 (assert (sendmessagehalt "f109: Sugar Cane -> Sugar"))
 (halt)
 )
@@ -901,7 +905,7 @@
 (item (name f112) (conf ?c0))
 (item (name f21) (conf ?c1))
 =>
-(assert (item (name f113) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f113) (conf (* 0.54 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f113: Gold Ingot, Melon Slice -> Glistering Melon Slice"))
 (halt)
 )
@@ -911,7 +915,7 @@
 (item (name f111) (conf ?c0))
 (item (name f116) (conf ?c1))
 =>
-(assert (item (name f117) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f117) (conf (* 0.57 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f117: Blaze Powder, Slimeball -> Magma Cream"))
 (halt)
 )
@@ -921,7 +925,7 @@
 (item (name f118) (conf ?c0))
 (item (name f21) (conf ?c1))
 =>
-(assert (item (name f119) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f119) (conf (* 0.40 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f119: Gold Ingot, Carrot -> Golden Carrot"))
 (halt)
 )
@@ -932,7 +936,7 @@
 (item (name f114) (conf ?c1))
 (item (name f123) (conf ?c2))
 =>
-(assert (item (name f124) (conf (* 1 (min ?c0 ?c1 ?c2)) ) ) )
+(assert (item (name f124) (conf (* 0.69 (min ?c0 ?c1 ?c2)) ) ) )
 (assert (sendmessagehalt "f124: Brown Mushroom, Sugar, Spider Eye -> Fermented Spider Eye"))
 (halt)
 )
@@ -941,7 +945,7 @@
 (declare (salience 50))
 (item (name f105) (conf ?c0))
 =>
-(assert (item (name f126) (conf (* 1 (min ?c0)) ) ) )
+(assert (item (name f126) (conf (* 0.72 (min ?c0)) ) ) )
 (assert (sendmessagehalt "f126: Sand -> Glass"))
 (halt)
 )
@@ -950,7 +954,7 @@
 (declare (salience 50))
 (item (name f126) (conf ?c0))
 =>
-(assert (item (name f127) (conf (* 1 (min ?c0)) ) ) )
+(assert (item (name f127) (conf (* 0.59 (min ?c0)) ) ) )
 (assert (sendmessagehalt "f127: Glass -> Glass Bottle"))
 (halt)
 )
@@ -960,7 +964,7 @@
 (item (name f125) (conf ?c0))
 (item (name f127) (conf ?c1))
 =>
-(assert (item (name f128) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f128) (conf (* 0.84 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f128: Water, Glass Bottle -> Water Bottle"))
 (halt)
 )
@@ -970,7 +974,7 @@
 (item (name f106) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f129) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f129) (conf (* 0.80 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f129: Nether Wart, Water Bottle -> Awkward Potion"))
 (halt)
 )
@@ -980,7 +984,7 @@
 (item (name f107) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f130) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f130) (conf (* 0.48 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f130: Gunpowder, Water Bottle -> Splash Potion"))
 (halt)
 )
@@ -990,7 +994,7 @@
 (item (name f114) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.30 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Spider Eye, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1000,7 +1004,7 @@
 (item (name f120) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.33 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Ghast Tear, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1010,7 +1014,7 @@
 (item (name f110) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.47 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Rabbits Foot, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1020,7 +1024,7 @@
 (item (name f111) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.22 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Blaze Powder, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1030,7 +1034,7 @@
 (item (name f113) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.16 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Glistering Melon Slice, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1040,7 +1044,7 @@
 (item (name f109) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.66 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Sugar, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1050,7 +1054,7 @@
 (item (name f117) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.32 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Magma Cream, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1060,7 +1064,7 @@
 (item (name f128) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f131) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f131) (conf (* 0.42 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f131: Redstone, Water Bottle -> Mundane Potion"))
 (halt)
 )
@@ -1070,7 +1074,7 @@
 (item (name f108) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f132) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f132) (conf (* 0.33 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f132: Glowstone Dust, Water Bottle -> Thick Potion"))
 (halt)
 )
@@ -1080,7 +1084,7 @@
 (item (name f109) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f133) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f133) (conf (* 0.70 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f133: Sugar, Awkward Potion -> Potion of Swiftness"))
 (halt)
 )
@@ -1090,7 +1094,7 @@
 (item (name f124) (conf ?c0))
 (item (name f133) (conf ?c1))
 =>
-(assert (item (name f134) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f134) (conf (* 0.44 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f134: Fermented Spider Eye, Potion of Swiftness -> Potion of Slowness"))
 (halt)
 )
@@ -1100,7 +1104,7 @@
 (item (name f110) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f135) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f135) (conf (* 0.32 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f135: Rabbits Foot, Awkward Potion -> Potion of Leaping"))
 (halt)
 )
@@ -1110,7 +1114,7 @@
 (item (name f111) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f136) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f136) (conf (* 0.63 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f136: Blaze Powder, Awkward Potion -> Potion of Strength"))
 (halt)
 )
@@ -1120,7 +1124,7 @@
 (item (name f113) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f137) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f137) (conf (* 0.79 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f137: Glistering Melon Slice, Awkward Potion -> Potion of Healing"))
 (halt)
 )
@@ -1130,7 +1134,7 @@
 (item (name f124) (conf ?c0))
 (item (name f137) (conf ?c1))
 =>
-(assert (item (name f138) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f138) (conf (* 0.31 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f138: Fermented Spider Eye, Potion of Healing -> Potion of Harming"))
 (halt)
 )
@@ -1140,7 +1144,7 @@
 (item (name f114) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f139) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f139) (conf (* 0.37 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f139: Spider Eye, Awkward Potion -> Potion of Poison"))
 (halt)
 )
@@ -1150,7 +1154,7 @@
 (item (name f124) (conf ?c0))
 (item (name f139) (conf ?c1))
 =>
-(assert (item (name f138) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f138) (conf (* 0.25 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f138: Fermented Spider Eye, Potion of Poison -> Potion of Harming"))
 (halt)
 )
@@ -1160,7 +1164,7 @@
 (item (name f120) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f140) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f140) (conf (* 0.68 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f140: Ghast Tear, Awkward Potion -> Potion of Regeneration"))
 (halt)
 )
@@ -1170,7 +1174,7 @@
 (item (name f117) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f141) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f141) (conf (* 0.52 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f141: Magma Cream, Awkward Potion -> Potion of Fire Resistance"))
 (halt)
 )
@@ -1180,7 +1184,7 @@
 (item (name f115) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f142) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f142) (conf (* 0.30 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f142: Pufferfish, Awkward Potion -> Potion of Water Breathing"))
 (halt)
 )
@@ -1190,7 +1194,7 @@
 (item (name f119) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f143) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f143) (conf (* 0.18 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f143: Golden Carrot, Awkward Potion -> Potion of Night Vision"))
 (halt)
 )
@@ -1200,7 +1204,7 @@
 (item (name f124) (conf ?c0))
 (item (name f143) (conf ?c1))
 =>
-(assert (item (name f144) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f144) (conf (* 0.90 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f144: Fermented Spider Eye, Potion of Night Vision -> Potion of Invisibility"))
 (halt)
 )
@@ -1210,7 +1214,7 @@
 (item (name f121) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f145) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f145) (conf (* 0.11 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f145: Turtle Shell, Awkward Potion -> Potion of Turtle Master"))
 (halt)
 )
@@ -1220,7 +1224,7 @@
 (item (name f122) (conf ?c0))
 (item (name f129) (conf ?c1))
 =>
-(assert (item (name f146) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f146) (conf (* 0.27 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f146: Phantom Membrane, Awkward Potion -> Potion of Slow Falling"))
 (halt)
 )
@@ -1230,7 +1234,7 @@
 (item (name f124) (conf ?c0))
 (item (name f128) (conf ?c1))
 =>
-(assert (item (name f147) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f147) (conf (* 0.32 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f147: Fermented Spider Eye, Water Bottle -> Potion of Weakness"))
 (halt)
 )
@@ -1240,7 +1244,7 @@
 (item (name f108) (conf ?c0))
 (item (name f133) (conf ?c1))
 =>
-(assert (item (name f148) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f148) (conf (* 0.67 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f148: Glowstone Dust, Potion of Swiftness -> Potion of Swiftness II"))
 (halt)
 )
@@ -1250,7 +1254,7 @@
 (item (name f133) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f149) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f149) (conf (* 0.52 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f149: Redstone, Potion of Swiftness -> Potion of Swiftness +"))
 (halt)
 )
@@ -1260,7 +1264,7 @@
 (item (name f134) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f150) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f150) (conf (* 0.47 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f150: Redstone, Potion of Slowness -> Potion of Slowness +"))
 (halt)
 )
@@ -1270,7 +1274,7 @@
 (item (name f124) (conf ?c0))
 (item (name f149) (conf ?c1))
 =>
-(assert (item (name f150) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f150) (conf (* 0.32 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f150: Fermented Spider Eye, Potion of Swiftness + -> Potion of Slowness +"))
 (halt)
 )
@@ -1280,7 +1284,7 @@
 (item (name f108) (conf ?c0))
 (item (name f134) (conf ?c1))
 =>
-(assert (item (name f151) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f151) (conf (* 0.36 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f151: Glowstone Dust, Potion of Slowness -> Potion of Slowness II"))
 (halt)
 )
@@ -1290,7 +1294,7 @@
 (item (name f135) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f152) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f152) (conf (* 0.33 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f152: Redstone, Potion of Leaping -> Potion of Leaping +"))
 (halt)
 )
@@ -1300,7 +1304,7 @@
 (item (name f135) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f153) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f153) (conf (* 0.25 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f153: Redstone, Potion of Leaping -> Potion of Leaping II"))
 (halt)
 )
@@ -1310,7 +1314,7 @@
 (item (name f124) (conf ?c0))
 (item (name f152) (conf ?c1))
 =>
-(assert (item (name f150) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f150) (conf (* 0.38 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f150: Fermented Spider Eye, Potion of Leaping + -> Potion of Slowness +"))
 (halt)
 )
@@ -1320,7 +1324,7 @@
 (item (name f136) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f154) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f154) (conf (* 0.79 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f154: Redstone, Potion of Strength -> Potion of Strength +"))
 (halt)
 )
@@ -1330,7 +1334,7 @@
 (item (name f108) (conf ?c0))
 (item (name f136) (conf ?c1))
 =>
-(assert (item (name f155) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f155) (conf (* 0.68 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f155: Glowstone Dust, Potion of Strength -> Potion of Strength II"))
 (halt)
 )
@@ -1340,7 +1344,7 @@
 (item (name f108) (conf ?c0))
 (item (name f137) (conf ?c1))
 =>
-(assert (item (name f156) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f156) (conf (* 0.93 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f156: Glowstone Dust, Potion of Healing -> Potion of Healing II"))
 (halt)
 )
@@ -1350,7 +1354,7 @@
 (item (name f108) (conf ?c0))
 (item (name f138) (conf ?c1))
 =>
-(assert (item (name f157) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f157) (conf (* 0.85 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f157: Glowstone Dust, Potion of Harming -> Potion of Harming II"))
 (halt)
 )
@@ -1360,7 +1364,7 @@
 (item (name f124) (conf ?c0))
 (item (name f156) (conf ?c1))
 =>
-(assert (item (name f157) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f157) (conf (* 0.24 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f157: Fermented Spider Eye, Potion of Healing II -> Potion of Harming II"))
 (halt)
 )
@@ -1370,7 +1374,7 @@
 (item (name f108) (conf ?c0))
 (item (name f139) (conf ?c1))
 =>
-(assert (item (name f158) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f158) (conf (* 0.47 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f158: Glowstone Dust, Potion of Poison -> Potion of Poison II"))
 (halt)
 )
@@ -1380,7 +1384,7 @@
 (item (name f139) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f159) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f159) (conf (* 0.33 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f159: Redstone, Potion of Poison -> Potion of Poison +"))
 (halt)
 )
@@ -1390,7 +1394,7 @@
 (item (name f124) (conf ?c0))
 (item (name f158) (conf ?c1))
 =>
-(assert (item (name f157) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f157) (conf (* 0.60 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f157: Fermented Spider Eye, Potion of Poison II -> Potion of Harming II"))
 (halt)
 )
@@ -1400,7 +1404,7 @@
 (item (name f140) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f160) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f160) (conf (* 0.72 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f160: Redstone, Potion of Regeneration -> Potion of Regeneration +"))
 (halt)
 )
@@ -1410,7 +1414,7 @@
 (item (name f108) (conf ?c0))
 (item (name f140) (conf ?c1))
 =>
-(assert (item (name f161) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f161) (conf (* 0.65 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f161: Glowstone Dust, Potion of Regeneration -> Potion of Regeneration II"))
 (halt)
 )
@@ -1420,7 +1424,7 @@
 (item (name f141) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f162) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f162) (conf (* 0.41 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f162: Redstone, Potion of Fire Resistance -> Potion of Fire Resistance +"))
 (halt)
 )
@@ -1430,7 +1434,7 @@
 (item (name f142) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f163) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f163) (conf (* 0.22 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f163: Redstone, Potion of Water Breathing -> Potion of Water Breathing +"))
 (halt)
 )
@@ -1440,7 +1444,7 @@
 (item (name f143) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f164) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f164) (conf (* 0.20 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f164: Redstone, Potion of Night Vision -> Potion of Night Vision +"))
 (halt)
 )
@@ -1450,7 +1454,7 @@
 (item (name f144) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f165) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f165) (conf (* 0.86 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f165: Redstone, Potion of Invisibility -> Potion of Invisibility +"))
 (halt)
 )
@@ -1460,7 +1464,7 @@
 (item (name f124) (conf ?c0))
 (item (name f164) (conf ?c1))
 =>
-(assert (item (name f165) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f165) (conf (* 0.79 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f165: Fermented Spider Eye, Potion of Night Vision + -> Potion of Invisibility +"))
 (halt)
 )
@@ -1470,7 +1474,7 @@
 (item (name f145) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f166) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f166) (conf (* 0.05 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f166: Redstone, Potion of Turtle Master -> Potion of Turtle Master +"))
 (halt)
 )
@@ -1480,7 +1484,7 @@
 (item (name f108) (conf ?c0))
 (item (name f145) (conf ?c1))
 =>
-(assert (item (name f167) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f167) (conf (* 0.12 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f167: Glowstone Dust, Potion of Turtle Master -> Potion of Turtle Master II"))
 (halt)
 )
@@ -1490,7 +1494,7 @@
 (item (name f146) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f168) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f168) (conf (* 0.24 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f168: Redstone, Potion of Slow Falling -> Potion of Slow Falling +"))
 (halt)
 )
@@ -1500,7 +1504,7 @@
 (item (name f147) (conf ?c0))
 (item (name f20) (conf ?c1))
 =>
-(assert (item (name f169) (conf (* 1 (min ?c0 ?c1)) ) ) )
+(assert (item (name f169) (conf (* 0.50 (min ?c0 ?c1)) ) ) )
 (assert (sendmessagehalt "f169: Redstone, Potion of Weakness -> Potion of Weakness +"))
 (halt)
 )

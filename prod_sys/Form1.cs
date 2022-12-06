@@ -76,7 +76,7 @@ namespace prod_sys
             rightCheckedFacts = new HashSet<Fact>();
         }
 
-        private void NewRecognPhrases(List<FactInstance> phrases)
+        private bool NewRecognPhrases(List<FactInstance> phrases)
         {
             String CropName(FactInstance f)
             {
@@ -95,6 +95,7 @@ namespace prod_sys
             var fact_conf = fs.Where(f => f.RelationName == "item").ToList().Where(f => CropName(f).Equals(phrase[0])).First();
             richTextBox1.Text += $"Выведен факт  {phrase[0]}: {phrase[1]}  ({CropConf(fact_conf)})\n";
             clips.Eval("(assert (clearmessage))");
+            return rightCheckedFacts.Where(f => f.iid == phrase[0]).Count() == 1;
         }
 
         private void HandleResponse()
@@ -102,16 +103,25 @@ namespace prod_sys
             clips.Run();
             var fs = clips.GetFactList();
             var readyFacts = fs.Where(f => f.RelationName == "sendmessagehalt").ToList();
+            bool goal= false;
             if (readyFacts.Count > 0)
             {
-                NewRecognPhrases(readyFacts);
+                goal = NewRecognPhrases(readyFacts);
             }
             else
             {
-                richTextBox1.Text += "Подходящих вариантов нет\n";
+                //richTextBox1.Text += "Подходящих вариантов нет\n";
                 button2.Enabled = false;
             }
             clips.Eval("(assert (clear-message))");
+
+            if (goal)
+            {
+                richTextBox1.Text += "Целевой факт выведен\n";
+            }
+
+            if (readyFacts.Count > 0)
+                HandleResponse();
         }
 
         private void Forward()
@@ -161,6 +171,7 @@ namespace prod_sys
         private void button2_Click(object sender, EventArgs e)
         {
             HandleResponse();
+            button2.Enabled = false;
         }
     }
 }

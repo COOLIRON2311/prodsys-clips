@@ -20,12 +20,12 @@ with open("generated_rules.clp", 'w', encoding='utf8') as o, open("rules.txt", e
 ?i1 <- (item (name ?f1) (conf ?conf1))
 ?i2 <- (item (name ?f2) (conf ?conf2))
 =>
-(if (eq ?f1 ?f2) then
-(assert  (item (name ?f1) (conf (- (+ ?conf1 ?conf2) (* ?conf1 ?conf2))))))
+(if (and (eq ?f1 ?f2) (!= ?conf1 ?conf2)) then
+(assert  (item (name ?f1) (conf (- (+ ?conf1 ?conf2) (* ?conf1 ?conf2)))))
 (retract ?i1)
 (retract ?i2)
-(assert ( sendmessagehalt ?f1) )
-(halt)
+(assert ( sendmessagehalt (sym-cat ?f1 ": Conf was recalculated")) )
+(halt))
 )
 
 ''')
