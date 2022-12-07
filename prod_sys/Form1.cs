@@ -15,6 +15,7 @@ namespace prod_sys
 
         List<Fact> facts;
         List<Rule> rules;
+        bool targetReached = false;
 
         HashSet<Fact> leftCheckedFacts;
         HashSet<Fact> rightCheckedFacts;
@@ -117,11 +118,16 @@ namespace prod_sys
 
             if (goal)
             {
-                richTextBox1.Text += "Целевой факт выведен\n";
+                targetReached = true;
+                richTextBox1.Text += "====================\nЦелевой факт выведен\n====================\n";
             }
 
             if (readyFacts.Count > 0)
                 HandleResponse();
+            else if (!targetReached)
+            {
+                richTextBox1.Text += "======================\nЦелевой факт не выведен\n======================\n";
+            }
         }
 
         private void Forward()
@@ -164,6 +170,7 @@ namespace prod_sys
         private void button1_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
+            targetReached = false;
             if (leftCheckedFacts.Count > 0 && rightCheckedFacts.Count == 1)
                 Forward();
         }
@@ -172,6 +179,21 @@ namespace prod_sys
         {
             HandleResponse();
             button2.Enabled = false;
+        }
+
+        private void checkedListBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            HashSet<string> items = new HashSet<string>{ "f123", "f106", "f105", "f58", "f114", "f125"};
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                for (int i = 0; i < checkedListBox1.Items.Count; i++)
+                {
+                    if (items.Any(id => checkedListBox1.GetItemText(checkedListBox1.Items[i]).Contains(id)))
+                    {
+                        checkedListBox1.SetItemChecked(i, true);
+                    }
+                }
+            }
         }
     }
 }

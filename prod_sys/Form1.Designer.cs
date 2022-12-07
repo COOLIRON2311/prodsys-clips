@@ -46,6 +46,7 @@ namespace prod_sys
             this.checkedListBox1.Size = new System.Drawing.Size(392, 735);
             this.checkedListBox1.TabIndex = 0;
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+            this.checkedListBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.checkedListBox1_KeyPress);
             // 
             // button1
             // 

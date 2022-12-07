@@ -24,7 +24,7 @@ with open("generated_rules.clp", 'w', encoding='utf8') as o, open("rules.txt", e
 (assert  (item (name ?f1) (conf (- (+ ?conf1 ?conf2) (* ?conf1 ?conf2)))))
 (retract ?i1)
 (retract ?i2)
-(assert ( sendmessagehalt (sym-cat ?f1 ": Conf was recalculated")) )
+(assert ( sendmessagehalt (sym-cat ?f1 ": \n=================================\nКоэффициент уверенности пересчитан\n=================================")) )
 (halt))
 )
 

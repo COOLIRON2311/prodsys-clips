@@ -22,7 +22,10 @@
 (assert  (item (name ?f1) (conf (- (+ ?conf1 ?conf2) (* ?conf1 ?conf2)))))
 (retract ?i1)
 (retract ?i2)
-(assert ( sendmessagehalt (sym-cat ?f1 ": Conf was recalculated")) )
+(assert ( sendmessagehalt (sym-cat ?f1 ": 
+=================================
+Коэффициент уверенности пересчитан
+=================================")) )
 (halt))
 )
 
